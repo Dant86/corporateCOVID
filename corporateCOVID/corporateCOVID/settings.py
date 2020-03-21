@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'fdnfnt^ez294h*&c61_f2u=8i7!4oqx$*9g%eejn*zox=-dm-i'
+SECRET_KEY = os.environ['SECRET']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,7 +54,7 @@ ROOT_URLCONF = 'corporateCOVID.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'corporateCOVID.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ('NAME'),
-        'USER': os.environ('DB_USR'),
-        'PASSWORD': os.environ('DB_PASS')
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USR'],
+        'PASSWORD': os.environ['DB_PASS']
     }
 }
 

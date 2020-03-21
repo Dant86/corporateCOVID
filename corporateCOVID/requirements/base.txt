@@ -1,0 +1,6 @@
+Django
+django-dotenv
+mysqlclient
+pytz
+setuptools
+wheel

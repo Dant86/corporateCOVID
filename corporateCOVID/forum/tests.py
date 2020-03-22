@@ -80,4 +80,27 @@ class CompanyTestCase(TestCase):
         self.assertEqual(len(aviation_companies), 2)
         tech_companies = Company.objects.filter(industry_from__industry_field='Technology')
         self.assertEqual(len(tech_companies), 2)
+    
+    def test_update(self):
+        amzn = Company.objects.get(company_name='Amazon')
+        amzn.company_name = 'Facebook'
+        amzn.save()
+        try:
+            bad_obj = Company.objects.get(company_name='Amazon')
+        except ObjectDoesNotExist:
+            bad_obj = None
+        self.assertIsNone(bad_obj)
+        # The below line shouldn't throw an ObjectDoesNotExist
+        fb = Company.objects.get(company_name='Facebook')
+    
+    def test_delete(self):
+        amzn = Company.objects.get(company_name='Amazon')
+        amzn.delete()
+        try:
+            bad_obj = Company.objects.get(company_name='Amazon')
+        except ObjectDoesNotExist:
+            bad_obj = None
+        self.assertIsNone(bad_obj)
+        companies = Company.objects.filter()
+        self.assertEqual(len(companies), 3)
 

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Industry(models.Model):
@@ -9,11 +10,6 @@ class Company(models.Model):
         Industry,
         on_delete=models.CASCADE
     )
-
-class User(models.Model):
-    username = models.CharField(max_length=64)
-    password_hash = models.CharField(max_length=64)
-    email = models.CharField(max_length=64)
 
 class Post(models.Model):
     body = models.TextField()

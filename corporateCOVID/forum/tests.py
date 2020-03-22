@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 from forum.models import Industry, Company, Post, User, Comment
 
 class IndustryTestCase(TestCase):
@@ -103,4 +104,13 @@ class CompanyTestCase(TestCase):
         self.assertIsNone(bad_obj)
         companies = Company.objects.filter()
         self.assertEqual(len(companies), 3)
+
+class UserTestCase(TestCase):
+    def setUp(self):
+        usr = User.objects.create(username='vedant', password='asdfsdfasdf',
+                                  email='test@ing.com')
+
+    def test_existence(self):
+        usr = User.objects.get(email='test@ing.com')
+        self.assertEqual(usr.username, 'vedant')
 

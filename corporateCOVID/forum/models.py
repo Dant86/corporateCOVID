@@ -36,4 +36,5 @@ class Comment(models.Model):
         User,
         on_delete = models.CASCADE
     )
+    flags = models.IntegerField(default=0)
 

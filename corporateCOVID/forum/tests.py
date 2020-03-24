@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from forum.models import Industry, Company, Post, User, Comment
+from datetime import datetime
 
 class IndustryTestCase(TestCase):
     def setUp(self):
@@ -113,4 +114,56 @@ class UserTestCase(TestCase):
     def test_existence(self):
         usr = User.objects.get(email='test@ing.com')
         self.assertEqual(usr.username, 'vedant')
+
+class PostTestCase(TestCase):
+    def setUp(self):
+        CompanyTestCase().setUp()
+        amzn = Company.objects.get(company_name='Amazon')
+        UserTestCase().setUp()
+        usr = User.objects.get(email='test@ing.com')
+        Post.objects.create(body='This is a sample post',
+                            timestamp=datetime.now(),
+                            company_about=amzn, posted_by=usr)
+    
+    def test_existence(self):
+        post = Post.objects.filter()[0]
+        self.assertEqual(post.body, 'This is a sample post')
+
+    def test_update(self):
+        post = Post.objects.filter()[0]
+        post.body = 'changed body.'
+        post.save()
+        self.assertNotEqual(post.body, 'This is a sample post')
+        self.assertEqual(Post.objects.filter()[0].body, 'changed body.')
+
+    def test_delete(self):
+        post = Post.objects.filter()[0]
+        post.delete()
+        self.assertEqual(len(Post.objects.filter()), 0)
+
+class CommentTestCase(TestCase):
+    def setUp(self):
+        PostTestCase().setUp()
+        post = Post.objects.filter()[0]
+        comment = Comment.objects.create(body='This is a sample comment',
+                                         timestamp=datetime.now(),
+                                         is_positive=True,
+                                         commented_on=post,
+                                         commented_by=User.objects.filter()[0])
+
+    def test_existence(self):
+        comment = Comment.objects.filter()[0]
+        self.assertEqual(comment.body, 'This is a sample comment')
+    
+    def test_update(self):
+        comment = Comment.objects.filter()[0]
+        comment.body = 'Updated body'
+        comment.save()
+        self.assertEqual(Comment.objects.filter()[0].body, 'Updated body')
+
+    def test_delete(self):
+        comment = Comment.objects.filter()[0]
+        comment.delete()
+        self.assertEqual(len(Comment.objects.filter()), 0)
+
 
